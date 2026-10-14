@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://trois-heures-trente.com/sitemap.xml
