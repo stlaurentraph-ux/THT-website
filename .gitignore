@@ -1,4 +1,9 @@
 .DS_Store
 node_modules/
 .env
+.env.local
 .claude/worktrees/
+assets/_raw/
+legacy/bundles/
+__pycache__/
+*.pyc

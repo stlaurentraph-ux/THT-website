@@ -8,23 +8,48 @@
 }
 
 :8080 {
-	root * /srv
-	encode gzip zstd
-
-	# Extensionless URLs: /contact -> contact.html
-	try_files {path} {path}.html {path}/index.html
-
-	file_server
-
-	header {
-		X-Content-Type-Options nosniff
-		X-Frame-Options SAMEORIGIN
-		Referrer-Policy strict-origin-when-cross-origin
+	handle /api/* {
+		reverse_proxy 127.0.0.1:8000
 	}
 
-	# Bundles are large and self-contained; let the browser cache them briefly.
-	@html path *.html
-	header @html Cache-Control "public, max-age=300, must-revalidate"
+	handle /llms.txt {
+		root * /srv
+		header Content-Type "text/plain; charset=utf-8"
+		file_server
+	}
+
+	handle /en/llms.txt {
+		root * /srv
+		header Content-Type "text/plain; charset=utf-8"
+		file_server
+	}
+
+	handle {
+		root * /srv
+		encode gzip zstd
+
+		try_files {path} {path}.html {path}/index.html
+
+		file_server
+
+		header {
+			X-Content-Type-Options nosniff
+			X-Frame-Options SAMEORIGIN
+			Referrer-Policy strict-origin-when-cross-origin
+			Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+			Permissions-Policy "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+			Content-Security-Policy "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data: blob:; connect-src 'self' blob: data:; worker-src 'self' blob:; frame-src https://www.youtube.com https://www.youtube-nocookie.com; upgrade-insecure-requests"
+		}
+
+		@assets path /assets/*
+		header @assets Cache-Control "public, max-age=31536000, immutable"
+
+		@static path *.xml *.txt
+		header @static Cache-Control "public, max-age=86400"
+
+		@html path *.html
+		header @html Cache-Control "public, max-age=3600, must-revalidate"
+	}
 
 	handle_errors {
 		respond "{err.status_code} {err.status_text}" {err.status_code}

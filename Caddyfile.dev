@@ -1,0 +1,39 @@
+{
+	admin off
+	persist_config off
+	auto_https off
+}
+
+:8080 {
+	handle /api/* {
+		reverse_proxy 127.0.0.1:8000
+	}
+
+	handle /llms.txt {
+		root * /workspace
+		header Content-Type "text/plain; charset=utf-8"
+		file_server
+	}
+
+	handle /en/llms.txt {
+		root * /workspace
+		header Content-Type "text/plain; charset=utf-8"
+		file_server
+	}
+
+	handle {
+		root * /workspace
+		encode gzip zstd
+		try_files {path} {path}.html {path}/index.html
+		file_server
+
+		header {
+			X-Content-Type-Options nosniff
+			X-Frame-Options SAMEORIGIN
+			Referrer-Policy strict-origin-when-cross-origin
+			Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+			Permissions-Policy "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+			Content-Security-Policy "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data: blob:; connect-src 'self' blob: data:; worker-src 'self' blob:; frame-src https://www.youtube.com https://www.youtube-nocookie.com; upgrade-insecure-requests"
+		}
+	}
+}
