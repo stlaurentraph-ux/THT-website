@@ -10,6 +10,7 @@ COPY docker/start.sh /start.sh
 RUN chmod +x /start.sh
 
 COPY *.html /srv/
+COPY favicon.ico /srv/favicon.ico
 COPY en /srv/en/
 COPY assets /srv/assets/
 COPY sitemap.xml robots.txt /srv/

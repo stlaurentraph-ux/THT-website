@@ -19,7 +19,21 @@ CONTACT_EMAIL = "compagnie.tht@gmail.com"
 LEGACY_CONTACT_EMAIL = bytes.fromhex(
     "636f6e746163744074726f69732d6865757265732d7472656e74652e636f6d"
 ).decode()
-ORG_LOGO = f"{SITE_URL}/assets/favicon.svg"
+ORG_LOGO = f"{SITE_URL}/assets/icons/icon-512.png"
+
+
+def favicon_link_tags() -> str:
+    return "\n".join(
+        [
+            '  <link rel="icon" href="/favicon.ico" sizes="any">',
+            '  <link rel="icon" href="/assets/icons/favicon-32.png" type="image/png" sizes="32x32">',
+            '  <link rel="icon" href="/assets/icons/favicon-16.png" type="image/png" sizes="16x16">',
+            '  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" media="(prefers-color-scheme: light)">',
+            '  <link rel="icon" href="/assets/favicon-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)">',
+            '  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png" sizes="180x180">',
+            '  <link rel="manifest" href="/assets/site.webmanifest">',
+        ]
+    )
 ORG_SAME_AS = [
     "https://www.instagram.com/compagnie_tht/",
     "https://www.youtube.com/@THTCompagnie",
@@ -744,7 +758,7 @@ def head_block(page: str, lang: str, styles: str) -> str:
   <meta name="twitter:title" content="{meta["title"]}">
   <meta name="twitter:description" content="{meta["description"]}">
   <meta name="twitter:image" content="{og_image}">
-  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+{favicon_link_tags()}
 {ld_json_script_tag(page, lang)}
   <style>{styles}
   @media (max-width: 900px) {{
@@ -888,7 +902,7 @@ def inject_document_seo(html: str, page: str, lang: str) -> str:
   <meta property="og:url" content="{canonical}">
   <meta property="og:image" content="{og}">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+{favicon_link_tags()}
 {ld_json_script_tag(page, lang)}
 """
     html = re.sub(r"<title>Bundled Page</title>", block.strip(), html, count=1)

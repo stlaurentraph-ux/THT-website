@@ -1,0 +1,19 @@
+{
+  "name": "Compagnie THT (Trois Heures Trente)",
+  "short_name": "THT",
+  "icons": [
+    {
+      "src": "/assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#08090c",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}

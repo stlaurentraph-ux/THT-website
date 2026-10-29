@@ -20,7 +20,8 @@ Caddy `try_files` maps extensionless paths to `.html`.
 Canonical bundles live in `legacy/bundles/` (from `main`). Regenerate deployable HTML:
 
 ```sh
-pip install pillow
+pip install pillow cairosvg
+python3 scripts/generate_favicons.py   # from assets/source/tht-logo-black.svg
 python3 scripts/build_site.py
 ```
 
